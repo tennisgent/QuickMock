@@ -1,5 +1,7 @@
 (function(angular){
 
+	var NO_MOCK = ['$http', '$timeout', '$q'];
+	
 	var opts, mockPrefix;
 
 	quickmock.MOCK_PREFIX = mockPrefix = (quickmock.MOCK_PREFIX || '___');
@@ -38,6 +40,10 @@
 
 					for(var i=0; i<currProviderDeps.length - 1; i++){
 						var depName = currProviderDeps[i];
+						if(NO_MOCK.indexOf(depName) >= 0){
+							continue;	
+						}
+						
 						mocks[depName] = getMockForProvider(depName, currProviderDeps, i);
 					}
 				}

@@ -1,6 +1,6 @@
 (function(angular){
 
-	var opts, mockPrefix;
+	var opts, mockPrefix, providerElement;
 
 	quickmock.MOCK_PREFIX = mockPrefix = (quickmock.MOCK_PREFIX || '___');
 	quickmock.USE_ACTUAL = 'USE_ACTUAL_IMPLEMENTATION';
@@ -35,6 +35,7 @@
 				var currProviderName = providerData[2][0];
 				if(currProviderName === opts.providerName){
 					var currProviderDeps = providerData[2][1];
+                    			providerElement = currProviderDeps[currProviderDeps.length-1];
 
 					if (angular.isFunction(currProviderDeps)) {
 						currProviderDeps = currProviderDeps.$inject || injector.annotate(currProviderDeps);
@@ -87,6 +88,8 @@
 							angular.mock.module('ngAnimateMock');
 						}
 					};
+                		case 'service':
+                    			return injector.instantiate(providerElement, mocks);
 				default:
 					return injector.get(opts.providerName);
 			}
